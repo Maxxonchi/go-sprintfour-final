@@ -29,6 +29,9 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	if err != nil {
 		return 0, "", 0, err
 	}
+	if steps <= 0 || duration <= 0 {
+		return 0, "", 0, fmt.Errorf("неположительное число в переменных шаг и длительность")
+	}
 	return steps, unpacked[1], duration, nil
 }
 
@@ -40,7 +43,7 @@ func distance(steps int, height float64) float64 {
 }
 
 func meanSpeed(steps int, height float64, duration time.Duration) float64 {
-	if duration == 0 {
+	if duration <= 0 {
 		return 0
 	}
 	dist := distance(steps, height)
@@ -74,7 +77,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 	trainingInfo += fmt.Sprintf("Длительность: %.2f ч.\n", duration.Minutes()/minInH)
 	trainingInfo += fmt.Sprintf("Дистанция: %.2f км.\n", dist)
 	trainingInfo += fmt.Sprintf("Скорость: %.2f км/ч\n", speed)
-	trainingInfo += fmt.Sprintf("Сожгли калорий: %.2f", calories)
+	trainingInfo += fmt.Sprintf("Сожгли калорий: %.2f\n", calories)
 	return trainingInfo, nil
 }
 
